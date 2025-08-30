@@ -1,0 +1,26 @@
+from tkinter import *
+from tkinter import ttk
+
+def search(*args):
+    return False
+
+root = Tk()
+root.geometry("400x300")
+root.title("BlockGUI")
+
+mainframe = ttk.Frame(root, padding="3 3 12 12")
+mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
+root.columnconfigure(0, weight=1)
+root.rowconfigure(0, weight=1)
+
+Label(mainframe, text="Running Apps").grid(column=1, row=1)
+
+runningApps = ["Chrome", "Spotify", "Outlook", "Minecraft", "File Explorer"]
+runningvar = StringVar(value=runningApps)
+tasks = Listbox(mainframe, listvariable=runningvar)
+tasks.grid(column=1, row=2)
+
+
+
+
+root.mainloop()
