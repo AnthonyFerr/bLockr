@@ -6,9 +6,11 @@ def block():
     selection = tasks.curselection()
     if not selection:
         return  # nothing selected
+    
 
     for i in selection:
         app = taskList[i]  # get the actual app name
+        subprocess.run(["axe.bat", app], shell=True)
         if app and app not in blockedApps:  # avoid empty strings / duplicates
             blockedApps.append(app)
             taskList.remove(app)
