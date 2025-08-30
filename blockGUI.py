@@ -20,7 +20,8 @@ batchResult = subprocess.run(["simpleBatch.bat"],
 
 #get the tasklist from batch as a list, each line is a process
 #first 9 lines are junk, slice off
-runningvar = StringVar(value=batchResult.stdout.split("\n")[9:])
+taskList = [item.split(" ")[0] for item in batchResult.stdout.split("\n")[9:]]
+runningvar = StringVar(value=taskList)
 tasks = Listbox(mainframe, listvariable=runningvar, width=40)
 tasks.grid(column=1, row=2)
 
