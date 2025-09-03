@@ -1,22 +1,32 @@
 from tkinter import *
 from tkinter import ttk
 import subprocess
+import time
+import threading
+
 
 def block():
-    selection = tasks.curselection()
-    if not selection:
-        return  # nothing selected
-    
+    blockButton.grid_forget()
+    for task in tasks.curselection():
+        blockedBox.insert(0, taskList[task])
+        tasks.delete(task)
+    unblockButton.grid(column=2, row=2)
 
-    for i in selection:
-        app = taskList[i]  # get the actual app name
-        subprocess.run(["axe.bat", app], shell=True)
-        if app and app not in blockedApps:  # avoid empty strings / duplicates
-            blockedApps.append(app)
-            taskList.remove(app)
 
-    blockedList.set(blockedApps)  # refresh the listbox
-    runningvar.set(taskList)
+def unblock():
+    #hide the unblock button
+    unblockButton.grid_forget()
+    #redisplay the block button
+    blockButton.grid(column=2, row=2)
+    #remove all blocked tasks from list
+    for task in blockedApps:
+        blockedBox.delete(task)
+    blockedApps.clear()
+
+def chopping(interval):
+    while True:
+        for task in blockedBox:
+            print(task)
 
 
 root = Tk()
@@ -39,16 +49,20 @@ batchResult = subprocess.run(["simpleBatch.bat"],
 #first 9 lines are junk, slice off
 taskList = [item.split(" ")[0] for item in batchResult.stdout.split("\n")[9:]]
 runningvar = StringVar(value=taskList)
-tasks = Listbox(mainframe, listvariable=runningvar, width=20)
+tasks = Listbox(mainframe, listvariable=runningvar, width=20, selectmode="multiple")
 tasks.grid(column=1, row=2)
 
 blockedApps = []
 blockedList = StringVar(value=blockedApps)
+
 blockButton = Button(mainframe, text="Block", command=block)
 blockButton.grid(column=2, row=2)
+
+unblockButton = Button(mainframe, text="Unblock", command=unblock)
+
 blockLabel = Label(mainframe, text="Blocked Apps")
-blockLabel.grid(column=3, row=1)
-blockedBox = Listbox(mainframe, listvariable=blockedList, width=20)
+
+blockedBox = Listbox(mainframe, listvariable=blockedList, width=20, selectmode="multiple")
 blockedBox.grid(column=3, row=2)
 
 
