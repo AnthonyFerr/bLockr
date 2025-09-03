@@ -9,9 +9,9 @@ def block():
     blockButton.grid_forget()
     for task in tasks.curselection():
         blockedBox.insert(0, taskList[task])
+        blockedApps.append(taskList[task])
         tasks.delete(task)
     unblockButton.grid(column=2, row=2)
-
 
 def unblock():
     #hide the unblock button
@@ -20,7 +20,7 @@ def unblock():
     blockButton.grid(column=2, row=2)
     #remove all blocked tasks from list
     for task in blockedApps:
-        blockedBox.delete(task)
+        blockedBox.delete(0, END)
     blockedApps.clear()
 
 def chopping(interval):
